@@ -1,7 +1,5 @@
 "use strict";
 
-"use strict";
-
 function Store(data = {}) {
     const self = this,
         _ = {};
