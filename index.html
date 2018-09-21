@@ -13,9 +13,11 @@
         let stateStore = new Store({
             initialized: false
         });
+
         stateStore.addReflect("initialized", value => {
             alert(`Initialized: ${value.toString()}`);
         });
+
         setTimeout(() => {
             stateStore.initialized = true;
         }, 2000);
