@@ -12,6 +12,11 @@ function Store(data = {}) {
                     self._reflect(key, prxValue);
                     prxTarget[prxKey] = prxValue;
                     return true;
+                },
+                deleteProperty(prxTarget, prxKey) {
+                    self._reflect(key, `Delete property "${prxKey}"`);
+                    delete prxTarget[prxKey];
+                    return true;
                 }
             });
         }
