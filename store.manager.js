@@ -14,7 +14,7 @@ function Store(data = {}) {
                     return true;
                 },
                 deleteProperty(prxTarget, prxKey) {
-                    self._reflect(key, `Delete property "${prxKey}"`);
+                    self._reflect(key, Object.create(null));
                     delete prxTarget[prxKey];
                     return true;
                 }
