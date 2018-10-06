@@ -10,17 +10,17 @@
 <body>
     <script src="store.manager.js"></script>
     <script>
-        let stateStore = new Store({
-            initialized: false
-        });
+         let stateStore = new Store({
+             object: 2
+         });
 
-        stateStore.addReflect("initialized", value => {
-            alert(`Initialized: ${value.toString()}`);
-        });
+         stateStore.addReflect('object', value => {
+             console.log(value);
+             console.log(stateStore);
+         });
 
-        setTimeout(() => {
-            stateStore.initialized = true;
-        }, 2000);
+         stateStore.set('object', 120);
+
     </script>
 </body>
 </html>
