@@ -51,11 +51,12 @@ Store.prototype.set = function(key, value, fn){
         let nestedType = this._typeOf(this[keyA]);
         if(/object|array/.test(nestedType)){
                 this[keyA][keyB] = value;
+                this._isFn(fn) && fn(this[key]);
         }
     } else {
         this[key] = value;
+        this._isFn(fn) && fn(this[key]);
     }
-    this._isFn(fn) && fn(this[key]);
 };
 
 Store.prototype.is = function(key){
