@@ -46,8 +46,8 @@ function Store(data = {}) {
 }
 
 Store.prototype.set = function(key, value, fn){
-    if(/[/]/.test(key)){
-        let [keyA, keyB] = key.split('/');
+    if(/[.]/.test(key)){
+        let [keyA, keyB] = key.split('.');
         let nestedType = this._typeOf(this[keyA]);
         if(/object|array/.test(nestedType)){
                 this[keyA][keyB] = value;
