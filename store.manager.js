@@ -45,20 +45,6 @@ function Store(data = {}) {
     return this;
 }
 
-Store.prototype.set = function(key, value, fn){
-    if(/[.]/.test(key)){
-        let [keyA, keyB] = key.split('.');
-        let nestedType = this._typeOf(this[keyA]);
-        if(/object|array/.test(nestedType)){
-                this[keyA][keyB] = value;
-                this._isFn(fn) && fn(this[key]);
-        }
-    } else {
-        this[key] = value;
-        this._isFn(fn) && fn(this[key]);
-    }
-};
-
 Store.prototype.is = function(key){
     return Boolean(this[key]);
 };

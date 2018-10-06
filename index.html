@@ -11,15 +11,15 @@
     <script src="store.manager.js"></script>
     <script>
          let stateStore = new Store({
-             object: 2
+             initialized: false
          });
 
-         stateStore.addReflect('object', value => {
-             console.log(value);
-             console.log(stateStore);
-         });
+         stateStore.addReflect('initialized', value => console.log(value));
 
-         stateStore.set('object', 120);
+         setTimeout(() => {
+             stateStore.initialized = true;
+         }, 3000);
+
 
     </script>
 </body>
