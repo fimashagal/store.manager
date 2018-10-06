@@ -48,8 +48,7 @@ function Store(data = {}) {
 Store.prototype.set = function(key, value, fn){
     if(/[/]/.test(key)){
         let [keyA, keyB] = key.split('/');
-        if(Array.isArray(this[keyA])
-            || this[keyA] instanceof Object){
+        if(Array.isArray(this[keyA]) || this[keyA] instanceof Object){
                 this[keyA][keyB] = value;
         }
     } else {
