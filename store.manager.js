@@ -46,19 +46,11 @@ function Store(data = {}) {
 }
 
 Store.prototype.is = function(...args){
-    let response = true;
-    for(let arg of args){
-        response = Boolean(this[arg]);
-    }
-    return response;
+    return this._isMarriage(args);
 };
 
 Store.prototype.isnt = function(...args){
-    let response = true;
-    for(let arg of args){
-        response = Boolean(this[arg]);
-    }
-    return !response;
+    return !this._isMarriage(args);
 };
 
 Store.prototype.addReflect = function(key, fn){
@@ -83,4 +75,12 @@ Store.prototype._typeOf = function (object) {
 
 Store.prototype._isFn = function(fn) {
     return this._typeOf(fn) === "function";
+};
+
+Store.prototype._isMarriage = function(array) {
+    let response = true;
+    for(let key of array){
+        response = Boolean(this[key]);
+    }
+    return response;
 };
