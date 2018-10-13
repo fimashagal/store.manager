@@ -45,12 +45,20 @@ function Store(data = {}) {
     return this;
 }
 
-Store.prototype.is = function(key){
-    return Boolean(this[key]);
+Store.prototype.is = function(...args){
+    let response = true;
+    for(let arg of args){
+        response = Boolean(this[arg]);
+    }
+    return response;
 };
 
-Store.prototype.isnt = function(key){
-    return !Boolean(this[key]);
+Store.prototype.isnt = function(...args){
+    let response = true;
+    for(let arg of args){
+        response = Boolean(this[arg]);
+    }
+    return !response;
 };
 
 Store.prototype.addReflect = function(key, fn){

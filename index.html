@@ -11,7 +11,10 @@
     <script src="store.manager.js"></script>
     <script>
          let stateStore = new Store({
-             initialized: false
+             initialized: false,
+             a: true,
+             b: true,
+             c: false
          });
 
          stateStore.addReflect('initialized', value => console.log(value));
@@ -19,6 +22,8 @@
          setTimeout(() => {
              stateStore.initialized = true;
          }, 3000);
+
+         console.log(stateStore.isnt('a', 'b'));
 
 
     </script>
