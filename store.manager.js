@@ -79,7 +79,7 @@ Store.prototype._isFn = function(fn) {
 
 Store.prototype._isMarriage = function(array) {
     for(let key of array){
-        if(Boolean(this[key]) === false) return false;
+        if(!Boolean(this[key])) return false;
     }
     return true;
 };
