@@ -11,21 +11,12 @@
     <script src="store.manager.js"></script>
     <script>
          let stateStore = new Store({
-             initialized: false,
              a: true,
              b: true,
              c: false
          });
 
-         stateStore.addReflect('initialized', value => console.log(value));
-
-         setTimeout(() => {
-             stateStore.initialized = true;
-         }, 3000);
-
-         console.log(stateStore.isnt('b', 'a'));
-
-
+         console.log(stateStore.is('b', 'a'));
     </script>
 </body>
 </html>
