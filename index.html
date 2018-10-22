@@ -15,7 +15,7 @@
              a: 1
          });
 
-         stateStore.addRange('a', [-5, 3], value => console.log(`Min ${value}`), value => console.log(`Max ${value}`));
+         stateStore.addRange('a', [-5, 3], console.log, console.log);
 
          stateStore.addReflect('a', value => {
              console.log(value);
