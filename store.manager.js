@@ -33,6 +33,9 @@ function Store(data = {}) {
                     let dataItem = _[key];
                     if(self._typeOf(value) === dataItem.type
                         && value !== dataItem.value){
+                        if(self._typeOf(value) === "number" && self.isRanged(key)){
+                            value = self._holdInRange(key, value);
+                        }
                         self._reflect(key, value);
                         dataItem.value = value;
                         return true;
@@ -42,6 +45,7 @@ function Store(data = {}) {
         });
     }
     this.reflects = {};
+    this.rangedNumbers = {};
     return this;
 }
 
@@ -61,6 +65,31 @@ Store.prototype.removeReflect = function(key){
     delete this.reflects[key];
 };
 
+Store.prototype.addRange = function(key, range){
+    if(this._typeOf(this[key]) !== "number"
+        || !Array.isArray(range)
+        || range.length !== 2
+        || !range.every(item => this._typeOf(item) === "number")) return;
+
+    if(range[1] < range[0]) {
+        range.reverse();
+    }
+
+    this.rangedNumbers[key] = { range: range };
+
+};
+
+Store.prototype.removeRange = function(key){
+    delete this.rangedNumbers[key];
+};
+
+Store.prototype.isRanged = function(key = ""){
+    for(let item of Object.keys(this.rangedNumbers)){
+        if(item === key) return true;
+    }
+    return false;
+};
+
 Store.prototype._reflect = function (key, value) {
     let { reflects } = this;
     if(key in reflects && this._isFn(reflects[key])) reflects[key](value);
@@ -71,6 +100,17 @@ Store.prototype._typeOf = function (object) {
         .call(object)
         .replace(/^\[object (.+)\]$/, '$1')
         .toLowerCase();
+};
+
+Store.prototype._holdInRange = function(key, value){
+    let [min, max] = this.rangedNumbers[key].range;
+    if(value < min) {
+        return min;
+    }
+    if(value > max){
+        return max;
+    }
+    return value;
 };
 
 Store.prototype._isFn = function(fn) {
