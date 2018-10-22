@@ -32,7 +32,7 @@ function Store(data = {}) {
                 set(value){
                     let dataItem = _[key];
                     if(self._typeOf(value) === dataItem.type){
-                        if(self._typeOf(value) === "number" && self.isRanged(key)){
+                        if(self._isNum(value) && self.isRanged(key)){
                             value = self._holdInRange(key, value);
                         }
                         if(value !== dataItem.value){
@@ -70,7 +70,7 @@ Store.prototype.addRange = function(key, range){
     if(this._typeOf(this[key]) !== "number"
         || !Array.isArray(range)
         || range.length !== 2
-        || !range.every(item => this._typeOf(item) === "number")) return;
+        || !range.every(item => this._isNum(item))) return;
 
     if(range[1] < range[0]) {
         range.reverse();
@@ -117,6 +117,10 @@ Store.prototype._holdInRange = function(key, value){
 
 Store.prototype._isFn = function(fn) {
     return this._typeOf(fn) === "function";
+};
+
+Store.prototype._isNum = function(num) {
+    return this._typeOf(num) === "number" && !isNaN(num);
 };
 
 Store.prototype._isMarriage = function(array) {
