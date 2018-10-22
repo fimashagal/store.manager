@@ -15,14 +15,17 @@
              a: 1
          });
 
-         stateStore.addReflect('a', value => console.log(value));
+         stateStore.addRange('a', [-5, 3]);
 
-         stateStore.addRange('a', [1, 10]);
+         stateStore.addReflect('a', value => {
+             console.log(value);
+         });
 
-         stateStore.a = 120;
-
-         stateStore.removeRange('a');
-
+         stateStore.a = -1;
+         stateStore.a = 1;
+         stateStore.a = 2;
+         stateStore.a = 3;
+         stateStore.a = 4;
          stateStore.a = 120;
 
 

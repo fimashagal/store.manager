@@ -31,14 +31,15 @@ function Store(data = {}) {
                 },
                 set(value){
                     let dataItem = _[key];
-                    if(self._typeOf(value) === dataItem.type
-                        && value !== dataItem.value){
+                    if(self._typeOf(value) === dataItem.type){
                         if(self._typeOf(value) === "number" && self.isRanged(key)){
                             value = self._holdInRange(key, value);
                         }
-                        self._reflect(key, value);
-                        dataItem.value = value;
-                        return true;
+                        if(value !== dataItem.value){
+                            self._reflect(key, value);
+                            dataItem.value = value;
+                            return true;
+                        }
                     }
                 }
             }
@@ -76,7 +77,6 @@ Store.prototype.addRange = function(key, range){
     }
 
     this.rangedNumbers[key] = { range: range };
-
 };
 
 Store.prototype.removeRange = function(key){
@@ -92,7 +92,9 @@ Store.prototype.isRanged = function(key = ""){
 
 Store.prototype._reflect = function (key, value) {
     let { reflects } = this;
-    if(key in reflects && this._isFn(reflects[key])) reflects[key](value);
+    if(key in reflects && this._isFn(reflects[key])) {
+        reflects[key](value);
+    }
 };
 
 Store.prototype._typeOf = function (object) {
