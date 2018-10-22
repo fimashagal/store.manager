@@ -15,7 +15,7 @@
              a: 1
          });
 
-         stateStore.addRange('a', [-5, 3]);
+         stateStore.addRange('a', [-5, 3], value => console.log(`Min ${value}`), value => console.log(`Max ${value}`));
 
          stateStore.addReflect('a', value => {
              console.log(value);
@@ -23,10 +23,16 @@
 
          stateStore.a = -1;
          stateStore.a = 0;
+         stateStore.a = -100;
          stateStore.a = 5;
          stateStore.a = 67;
          stateStore.a = 4;
          stateStore.a = 120;
+
+         stateStore.removeRange('a');
+
+         stateStore.a = 120;
+         stateStore.a = 240;
 
 
     </script>

@@ -66,7 +66,7 @@ Store.prototype.removeReflect = function(key){
     delete this.reflects[key];
 };
 
-Store.prototype.addRange = function(key, range){
+Store.prototype.addRange = function(key, range, minReflect, maxReflect){
     if(this._typeOf(this[key]) !== "number"
         || !Array.isArray(range)
         || range.length !== 2
@@ -77,6 +77,15 @@ Store.prototype.addRange = function(key, range){
     }
 
     this.rangedNumbers[key] = { range: range };
+    let rangeObject = this.rangedNumbers[key];
+    if(this._isFn(minReflect)) {
+        rangeObject.minReflect = minReflect;
+    }
+    if(this._isFn(maxReflect)) {
+        rangeObject.maxReflect = maxReflect;
+    }
+
+    this.rangedNumbers[key] = Object.freeze(rangeObject);
 };
 
 Store.prototype.removeRange = function(key){
@@ -105,11 +114,15 @@ Store.prototype._typeOf = function (object) {
 };
 
 Store.prototype._holdInRange = function(key, value){
-    let [min, max] = this.rangedNumbers[key].range;
+    let rangeObject = this.rangedNumbers[key],
+        [min, max] = rangeObject.range,
+        {minReflect, maxReflect} = rangeObject;
     if(value < min) {
+        this._isFn(minReflect) && minReflect(min);
         return min;
     }
     if(value > max){
+        this._isFn(maxReflect) && maxReflect(max);
         return max;
     }
     return value;
