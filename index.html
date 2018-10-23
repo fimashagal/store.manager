@@ -11,36 +11,16 @@
     <script src="store.manager.js"></script>
     <script>
 
-         let stateStore = new Store({
-             a: 2,
-             b: {
-                 "name": "abc"
-             }
-         });
+        const storeA = new Store({
+            propertyNumber: 0,
+            propertyBoolean: false,
+            propertyObject: {
+                a: true,
+                b: false
+            }
+        });
 
-         console.log(stateStore.isLocked('a'));
-         console.log(stateStore.isLocked('b'));
-         stateStore.a = 3;
-         stateStore.b.name = "vera";
-         console.log(stateStore.a);
-         console.log(stateStore.b);
-         stateStore.addLock('a');
-         stateStore.addLock('b');
-         console.log(stateStore.lockeds);
-         stateStore.a = 15;
-         stateStore.b.name = "Vovan";
-         console.log(stateStore.a);
-         console.log(stateStore.b);
-         console.log(stateStore.isLocked('a'));
-         console.log(stateStore.isLocked('b'));
-         stateStore.removeLock('a');
-         stateStore.removeLock('b');
-         stateStore.a = 15;
-         stateStore.b.name = "Corn";
-         console.log(stateStore.a);
-         console.log(stateStore.b);
-
-
+        console.log(storeA);
 
     </script>
 </body>
