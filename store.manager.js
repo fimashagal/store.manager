@@ -9,11 +9,17 @@ function Store(data = {}) {
         if(/object|array/.test(valueType)){
             value = new Proxy(value, {
                 set(prxTarget, prxKey, prxValue){
+                    if(self.isImmutabled(key)) {
+                        return false;
+                    }
                     self._reflect(key, prxValue);
                     prxTarget[prxKey] = prxValue;
                     return true;
                 },
                 deleteProperty(prxTarget, prxKey) {
+                    if(self.isImmutabled(key)) {
+                        return false;
+                    }
                     self._reflect(key, Object.create(null));
                     delete prxTarget[prxKey];
                     return true;
@@ -31,7 +37,7 @@ function Store(data = {}) {
                 },
                 set(value){
                     let dataItem = _[key];
-                    if(self._typeOf(value) === dataItem.type){
+                    if(self._typeOf(value) === dataItem.type && !self.isImmutabled(key)){
                         if(self._isNum(value) && self.isRanged(key)){
                             value = self._holdInRange(key, value);
                         }
@@ -47,6 +53,7 @@ function Store(data = {}) {
     }
     this.reflects = {};
     this.rangedNumbers = {};
+    this.immutables = {};
     return this;
 }
 
@@ -95,10 +102,20 @@ Store.prototype.removeRange = function(key){
 };
 
 Store.prototype.isRanged = function(key = ""){
-    for(let item of Object.keys(this.rangedNumbers)){
-        if(item === key) return true;
-    }
-    return false;
+    return this._isFeatured('rangedNumbers', key);
+};
+
+Store.prototype.addImmutability = function(key){
+    if(!key in this) return;
+    this.immutables[key] = true;
+};
+
+Store.prototype.removeImmutability = function(key){
+    delete this.immutables[key];
+};
+
+Store.prototype.isImmutabled = function(key = ""){
+    return this._isFeatured('immutables', key);
 };
 
 Store.prototype._reflect = function (key, value) {
@@ -143,4 +160,14 @@ Store.prototype._isMarriage = function(array) {
         if(!Boolean(this[key])) return false;
     }
     return true;
+};
+
+Store.prototype._isFeatured = function(groupName, key) {
+    if(!groupName in this) {
+        return false;
+    }
+    for(let item of Object.keys(this[groupName])){
+        if(item === key) return true;
+    }
+    return false;
 };
