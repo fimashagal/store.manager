@@ -62,7 +62,7 @@ Also u can use few arguments for group test
   storeA.propertyObject.a = "zero"; // reflect will not work cause property locked
   
   // If need detect lock
-  storeA.isLocked("propertyObject"); // false
+  storeA.isLocked("propertyObject"); // true
   
   // If need remove lock
   storeA.removeLock("propertyObject"); 
