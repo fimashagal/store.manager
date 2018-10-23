@@ -9,7 +9,7 @@ function Store(data = {}) {
         if(/object|array/.test(valueType)){
             value = new Proxy(value, {
                 set(prxTarget, prxKey, prxValue){
-                    if(self.isImmutabled(key)) {
+                    if(self.isLocked(key)) {
                         return false;
                     }
                     self._reflect(key, prxValue);
@@ -17,7 +17,7 @@ function Store(data = {}) {
                     return true;
                 },
                 deleteProperty(prxTarget, prxKey) {
-                    if(self.isImmutabled(key)) {
+                    if(self.isLocked(key)) {
                         return false;
                     }
                     self._reflect(key, Object.create(null));
@@ -37,7 +37,7 @@ function Store(data = {}) {
                 },
                 set(value){
                     let dataItem = _[key];
-                    if(self._typeOf(value) === dataItem.type && !self.isImmutabled(key)){
+                    if(self._typeOf(value) === dataItem.type && !self.isLocked(key)){
                         if(self._isNum(value) && self.isRanged(key)){
                             value = self._holdInRange(key, value);
                         }
@@ -53,7 +53,7 @@ function Store(data = {}) {
     }
     this.reflects = {};
     this.rangedNumbers = {};
-    this.immutables = {};
+    this.lockeds = {};
     return this;
 }
 
@@ -105,17 +105,17 @@ Store.prototype.isRanged = function(key = ""){
     return this._isFeatured('rangedNumbers', key);
 };
 
-Store.prototype.addImmutability = function(key){
-    if(!key in this && !key in this.immutables) return;
-    this.immutables[key] = true;
+Store.prototype.addLock = function(key){
+    if(!key in this && !key in this.lockeds) return;
+    this.lockeds[key] = true;
 };
 
-Store.prototype.removeImmutability = function(key){
-    delete this.immutables[key];
+Store.prototype.removeLock = function(key){
+    delete this.lockeds[key];
 };
 
-Store.prototype.isImmutabled = function(key = ""){
-    return this._isFeatured('immutables', key);
+Store.prototype.isLocked = function(key = ""){
+    return this._isFeatured('lockeds', key);
 };
 
 Store.prototype._reflect = function (key, value) {

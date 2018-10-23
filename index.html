@@ -18,23 +18,23 @@
              }
          });
 
-         console.log(stateStore.isImmutabled('a'));
-         console.log(stateStore.isImmutabled('b'));
+         console.log(stateStore.isLocked('a'));
+         console.log(stateStore.isLocked('b'));
          stateStore.a = 3;
          stateStore.b.name = "vera";
          console.log(stateStore.a);
          console.log(stateStore.b);
-         stateStore.addImmutability('a');
-         stateStore.addImmutability('b');
-         console.log(stateStore.immutables);
+         stateStore.addLock('a');
+         stateStore.addLock('b');
+         console.log(stateStore.lockeds);
          stateStore.a = 15;
          stateStore.b.name = "Vovan";
          console.log(stateStore.a);
          console.log(stateStore.b);
-         console.log(stateStore.isImmutabled('a'));
-         console.log(stateStore.isImmutabled('b'));
-         stateStore.removeImmutability('a');
-         stateStore.removeImmutability('b');
+         console.log(stateStore.isLocked('a'));
+         console.log(stateStore.isLocked('b'));
+         stateStore.removeLock('a');
+         stateStore.removeLock('b');
          stateStore.a = 15;
          stateStore.b.name = "Corn";
          console.log(stateStore.a);
