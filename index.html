@@ -11,11 +11,11 @@
     <script src="store.manager.js"></script>
     <script>
 
-         let stateStore = new Store({ a: 1 });
-
-         stateStore.addRange('a', [-10, 10], console.log, console.log);
+         let stateStore = new Store({ a: 154 });
 
          stateStore.addReflect('a', console.log);
+
+         stateStore.addRange('a', [-10, 10], console.log, console.log);
 
          for(let i = -20; i <= 20; i++){
              if(i === 10) {

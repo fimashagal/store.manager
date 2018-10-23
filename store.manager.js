@@ -86,6 +86,8 @@ Store.prototype.addRange = function(key, range, minReflect, maxReflect){
     }
 
     this.rangedNumbers[key] = Object.freeze(rangeObject);
+
+    this[key] = this._holdInRange(key, this[key]);
 };
 
 Store.prototype.removeRange = function(key){
