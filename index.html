@@ -11,29 +11,17 @@
     <script src="store.manager.js"></script>
     <script>
 
-         let stateStore = new Store({
-             a: 1
-         });
+         let stateStore = new Store({ a: 1 });
 
-         stateStore.addRange('a', [-5, 3], console.log, console.log);
+         stateStore.addRange('a', [-10, 10], console.log, console.log);
 
          stateStore.addReflect('a', value => {
              console.log(value);
          });
 
-         stateStore.a = -1;
-         stateStore.a = 0;
-         stateStore.a = -100;
-         stateStore.a = 5;
-         stateStore.a = 67;
-         stateStore.a = 4;
-         stateStore.a = 120;
-
-         stateStore.removeRange('a');
-
-         stateStore.a = 120;
-         stateStore.a = 240;
-
+         for(let i = -20; i <= 20; i++){
+             stateStore.a = i;
+         }
 
     </script>
 </body>
