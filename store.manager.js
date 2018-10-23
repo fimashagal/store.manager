@@ -106,7 +106,7 @@ Store.prototype.isRanged = function(key = ""){
 };
 
 Store.prototype.addImmutability = function(key){
-    if(!key in this) return;
+    if(!key in this && !key in this.immutables) return;
     this.immutables[key] = true;
 };
 
