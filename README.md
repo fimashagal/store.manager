@@ -36,6 +36,7 @@ Also u can use few arguments for group test
 ## Add/remove fixed range for only number values
 
 ```javascript
+  // Can use callbacks for minOverflow and maxOverflow
   storeA.addRange("propertyNumber", [-10, 10], console.log, console.log);
   
   storeA.addReflect("propertyNumber", console.log);
