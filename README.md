@@ -33,7 +33,7 @@ Also u can use few arguments for group test
   storeA.isnt("propertyBoolean", "propertyNumber"); // false
 ```
 
-## Add/remove fixed range for only number values
+## Add/remove fixed range for only number type property
 
 ```javascript
   // Can use callbacks for extremum overflow
@@ -52,7 +52,7 @@ Also u can use few arguments for group test
   storeA.isRanged("propertyNumber"); // false
 ```
 
-## Add/remove immutability lock for any type values and for nested properties in object-like values
+## Add/remove immutability lock for any type property and for nested values in object-like type property
 
 ```javascript
   storeA.addReflect("propertyObject", console.log);
