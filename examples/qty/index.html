@@ -21,13 +21,9 @@
 
         const counterElement =  document.querySelector('.counter');
 
-        const qtyStore = new Store({
-            qty: -1
-        });
+        const qtyStore = new Store({ qty: -1 });
 
-        qtyStore.addReflect('qty', value => {
-            counterElement.innerText = value;
-        });
+        qtyStore.addReflect('qty', value => counterElement.innerText = value);
 
         qtyStore.addRange('qty', [0, 10]);
 
@@ -45,7 +41,6 @@
                }
            }
         });
-
 
     </script>
 </body>
