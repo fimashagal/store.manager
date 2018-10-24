@@ -37,9 +37,10 @@ Also u can use few arguments for group test
 
 ```javascript
   // Can use callbacks for extremum overflow
-  storeA.addRange("propertyNumber", [-10, 10], console.log, console.log);
-  
-  storeA.addReflect("propertyNumber", console.log);
+  // Support sausage notation
+  storeA
+      .addRange("propertyNumber", [-10, 10], console.log, console.log)
+      .addReflect("propertyNumber", console.log);
   
   for(let i = -50; i <= 50; i++){
       storeA.propertyNumber = i;
@@ -55,9 +56,9 @@ Also u can use few arguments for group test
 ## Add/remove immutability lock for any type property and for nested values in object-like type property
 
 ```javascript
-  storeA.addReflect("propertyObject", console.log);
-  
-  storeA.addLock("propertyObject");
+  storeA
+      .addReflect("propertyObject", console.log)
+      .addLock("propertyObject");
   
   storeA.propertyObject.a = "zero"; // reflect will not work cause property locked
   
