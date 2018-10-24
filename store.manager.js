@@ -66,11 +66,15 @@ Store.prototype.isnt = function(...args){
 };
 
 Store.prototype.addReflect = function(key, fn){
-    if(key in this && this._isFn(fn)) this.reflects[key] = fn;
+    if(key in this && this._isFn(fn)) {
+        this.reflects[key] = fn;
+    }
+    return this;
 };
 
 Store.prototype.removeReflect = function(key){
     delete this.reflects[key];
+    return this;
 };
 
 Store.prototype.addRange = function(key, range, minReflect, maxReflect){
@@ -95,10 +99,13 @@ Store.prototype.addRange = function(key, range, minReflect, maxReflect){
     this.rangedNumbers[key] = Object.freeze(rangeObject);
 
     this[key] = this._holdInRange(key, this[key]);
+
+    return this;
 };
 
 Store.prototype.removeRange = function(key){
     delete this.rangedNumbers[key];
+    return this;
 };
 
 Store.prototype.isRanged = function(key = ""){
@@ -108,10 +115,12 @@ Store.prototype.isRanged = function(key = ""){
 Store.prototype.addLock = function(key){
     if(!key in this && !key in this.lockeds) return;
     this.lockeds[key] = true;
+    return this;
 };
 
 Store.prototype.removeLock = function(key){
     delete this.lockeds[key];
+    return this;
 };
 
 Store.prototype.isLocked = function(key = ""){

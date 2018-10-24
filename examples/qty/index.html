@@ -23,14 +23,15 @@
 
         const qtyStore = new Store({ qty: -1 });
 
-        qtyStore.addReflect('qty', value => counterElement.innerText = value);
-
-        qtyStore.addRange('qty', [0, 10]);
+        qtyStore
+            .addReflect('qty', value => {
+                counterElement.innerText = value;
+            })
+            .addRange('qty', [0, 10]);
 
         document.addEventListener('click', event => {
            let {target} = event,
                {classList} = target;
-
            if(classList.contains('btn')){
                event.preventDefault();
                if(classList.contains('minus')){
