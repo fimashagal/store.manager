@@ -37,7 +37,7 @@ Also u can use few arguments for group test
 
 ```javascript
   // Can use callbacks for extremum overflow
-  // Support sausage notation
+  // Support sausage notation for add/remove methods
   storeA
       .addRange("propertyNumber", [-10, 10], console.log, console.log)
       .addReflect("propertyNumber", console.log);
