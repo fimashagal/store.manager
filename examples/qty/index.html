@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Example: qty</title>
+    <link rel="stylesheet" href="./../style.css">
+</head>
+<body>
+    <main>
+        <button class="btn minus">-</button>
+        <div class="counter output"></div>
+        <button class="btn plus">+</button>
+    </main>
+
+    <script src="./../../store.manager.js"></script>
+
+    <script>
+
+        const counterElement =  document.querySelector('.counter');
+
+        const qtyStore = new Store({
+            qty: -1
+        });
+
+        qtyStore.addReflect('qty', value => {
+            counterElement.innerText = value;
+        });
+
+        qtyStore.addRange('qty', [0, 10]);
+
+        document.addEventListener('click', event => {
+           let {target} = event,
+               {classList} = target;
+
+           if(classList.contains('btn')){
+               event.preventDefault();
+               if(classList.contains('minus')){
+                   qtyStore.qty -= 1;
+               }
+               if(classList.contains('plus')){
+                   qtyStore.qty += 1;
+               }
+           }
+        });
+
+
+    </script>
+</body>
+</html>
