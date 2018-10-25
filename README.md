@@ -69,3 +69,18 @@ Also u can use few arguments for group test
   storeA.removeLock("propertyObject"); 
   
 ```
+
+## Inline directives
+
+For use directives add squared scoped keyword at begin of special string
+
+###JSON
+
+```javascript
+
+    // Add url after directive keyword
+
+    new Store({ removeData: "[json] https://api.myjson.com/bins/i2hdw" })
+        .addReflect('remoteData', console.log);
+
+```
