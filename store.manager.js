@@ -192,5 +192,7 @@ Store.prototype._isFeatured = function(groupName, key) {
 Store.prototype._loadJSON = function (key, url) {
     fetch(url)
         .then(response => response.json())
-        .then(response => response.status !== 404 && Object.assign(this[key], response));
+        .then(response => {
+            response.status !== 404 && Object.assign(this[key], response);
+        });
 };
