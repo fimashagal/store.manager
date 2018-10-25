@@ -14,17 +14,8 @@
 
     <script>
 
-        const qtyStore = new Store({
-            remoteData: "[json] https://api.myjson.com/bins/i2hdw"
-        });
-
-        qtyStore
-            .addReflect('remoteData', value => {
-                console.log(value);
-            });
-
-        console.log(qtyStore);
-
+        new Store({ remoteData: "[json] https://api.myjson.com/bins/i2hdw" })
+            .addReflect('remoteData', console.log);
 
     </script>
 </body>
