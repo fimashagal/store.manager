@@ -6,6 +6,12 @@ function Store(data = {}) {
     if(data.reflects) delete data.reflects;
     for(let [key, value] of Object.entries(data)){
         let valueType = this._typeOf(value);
+        if(valueType === "string" && /^\[json]/.test(value)){
+            let url = value.replace(/\[json]/, "");
+            valueType = "object";
+            value = {};
+            this._loadJSON(key, url);
+        }
         if(/object|array/.test(valueType)){
             value = new Proxy(value, {
                 set(prxTarget, prxKey, prxValue){
@@ -13,7 +19,7 @@ function Store(data = {}) {
                         return false;
                     }
                     prxTarget[prxKey] = prxValue;
-                    self._reflect(key, prxValue);
+                    self._reflect(key, prxTarget);
                     return true;
                 },
                 deleteProperty(prxTarget, prxKey) {
@@ -181,4 +187,10 @@ Store.prototype._isFeatured = function(groupName, key) {
         if(item === key) return true;
     }
     return false;
+};
+
+Store.prototype._loadJSON = function (key, url) {
+    fetch(url)
+        .then(response => response.json())
+        .then(response => response.status !== 404 && Object.assign(this[key], response));
 };
