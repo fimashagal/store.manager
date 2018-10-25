@@ -37,15 +37,17 @@ function Store(data = {}) {
                 },
                 set(value){
                     let dataItem = _[key];
-                    if(self._typeOf(value) === dataItem.type && !self.isLocked(key)){
-                        if(self._isNum(value) && self.isRanged(key)){
-                            value = self._holdInRange(key, value);
-                        }
-                        if(value !== dataItem.value){
-                            dataItem.value = value;
-                            self._reflect(key, value);
-                            return true;
-                        }
+                    if(self._typeOf(value) === dataItem.type
+                        && !self.isLocked(key)
+                        && !/object|array/.test(valueType)){
+                            if(self._isNum(value) && self.isRanged(key)){
+                                value = self._holdInRange(key, value);
+                            }
+                            if(value !== dataItem.value){
+                                dataItem.value = value;
+                                self._reflect(key, value);
+                                return true;
+                            }
                     }
                 }
             }
