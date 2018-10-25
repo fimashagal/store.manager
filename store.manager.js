@@ -12,8 +12,8 @@ function Store(data = {}) {
                     if(self.isLocked(key)) {
                         return false;
                     }
-                    self._reflect(key, prxValue);
                     prxTarget[prxKey] = prxValue;
+                    self._reflect(key, prxValue);
                     return true;
                 },
                 deleteProperty(prxTarget, prxKey) {
@@ -42,8 +42,8 @@ function Store(data = {}) {
                             value = self._holdInRange(key, value);
                         }
                         if(value !== dataItem.value){
-                            self._reflect(key, value);
                             dataItem.value = value;
+                            self._reflect(key, value);
                             return true;
                         }
                     }
