@@ -72,14 +72,14 @@ Also u can use few arguments for group test
 
 ## Inline directives
 
-For use directives add squared scoped keyword at begin of special string
+For use directives add keyword with double arrows at begin of special string
 
 
 ```javascript
 
-    // Add url after directive [json]
+    // Add url after directive 'json >> '
 
-    new Store({ removeData: "[json] https://api.myjson.com/bins/i2hdw" })
+    new Store({ removeData: "json >> https://api.myjson.com/bins/i2hdw" })
         .addReflect('remoteData', console.log);
 
 ```

@@ -6,8 +6,8 @@ function Store(data = {}) {
     if(data.reflects) delete data.reflects;
     for(let [key, value] of Object.entries(data)){
         let valueType = this._typeOf(value);
-        if(valueType === "string" && /^\[json]\s/.test(value)){
-            let url = value.replace(/\[json]\s/, "");
+        if(valueType === "string" && /^json\s>>\s/.test(value)){
+            let url = value.replace(/json\s>>\s/, "");
             valueType = "object";
             value = {};
             this._loadJSON(key, url);
