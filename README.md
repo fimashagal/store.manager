@@ -79,7 +79,7 @@ For use directives add keyword with double arrows at begin of special string
 
     // Add url after directive 'json >> '
 
-    new Store({ removeData: "json >> https://api.myjson.com/bins/i2hdw" })
+    new Store({ remoteData: "json >> https://api.myjson.com/bins/i2hdw" })
         .addReflect('remoteData', console.log);
 
 ```
