@@ -77,7 +77,7 @@ For use directives add keyword with double arrows at begin of special string
 
 ```javascript
 
-    // Add url after directive 'json >> '
+    // Add url after directive 'json >> ' for get remote data as object
 
     new Store({ remoteData: "json >> https://api.myjson.com/bins/i2hdw" })
         .addReflect('remoteData', console.log);
