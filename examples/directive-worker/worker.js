@@ -1,3 +1,3 @@
 setInterval(() => {
     postMessage(Math.random());
-}, 2500);
+}, 1500);

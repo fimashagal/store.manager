@@ -24,11 +24,7 @@ Store.prototype.initialize = function (data) {
                 value = {
                     result: null
                 };
-                try {
-                    this._playWorker({path, key});
-                } catch (err) {
-                    console.warn("Worker not found");
-                }
+                this._createWorker({path, key});
             }
         }
         if(/object|array/.test(valueType)){
@@ -116,10 +112,9 @@ Store.prototype.isLocked = function(key = ""){
 };
 
 Store.prototype.playWorker = function (key) {
-    let path = this._workers[key].path;
     if(this._workers[key] && this._typeOf(this._workers[key].path) !== "null"){
-
-        this._playWorker({path, key});
+        let path = this._workers[key].path;
+        this._createWorker({ path, key });
     }
     return this;
 };
@@ -250,17 +245,18 @@ Store.prototype._accessorify = function (options = {}) {
     });
 };
 
-Store.prototype._playWorker = function (options = {}) {
+Store.prototype._createWorker = function (options = {}) {
     let {path, key} = options;
     let worker = new Worker(path);
-    if(!this._workers[key]){
+    if(!this._workers[key] || this._typeOf(!this._workers[key]) === "null"){
         this._workers[key] = {
             worker,
             path
         };
     }
     worker.onmessage = event => this[key].result = event.data;
-    worker.onerror = event => console.warn(event.message);
+    worker.onerror = () => console.warn(`Worker error`);
+    return this;
 };
 
 
