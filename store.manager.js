@@ -11,7 +11,6 @@ function Store(data = {}) {
 
 Store.prototype.initialize = function (data) {
     if(this._initialized.status === true || !Object.values(data).length) return this;
-    const self = this;
     for(let [key, value] of Object.entries(data)){
         let valueType = this._typeOf(value);
         if(valueType === "string" && /^json\s>>\s/.test(value)){
@@ -23,12 +22,11 @@ Store.prototype.initialize = function (data) {
         if(/object|array/.test(valueType)){
             value = this._proxify(key, value);
         }
-        self._[key] = {
+        this._[key] = {
             value: value,
             type: valueType
         };
-        self._accessorify({ key, valueType });
-
+        this._accessorify({ key, valueType });
     }
     this._initialized.status = true;
     this._initialized = Object.freeze(this._initialized);
