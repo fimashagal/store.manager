@@ -112,7 +112,8 @@ Store.prototype.isLocked = function(key = ""){
 };
 
 Store.prototype.playWorker = function (key) {
-    if(this._workers[key] && this._typeOf(this._workers[key].path) !== "null"){
+    if(this._workers[key] && this._typeOf(this._workers[key].path) !== "null" && this._workers[key].played !== true){
+        this._workers[key].played = true;
         let path = this._workers[key].path;
         this._createWorker({ path, key });
     }
@@ -120,8 +121,9 @@ Store.prototype.playWorker = function (key) {
 };
 
 Store.prototype.stopWorker = function (key) {
-    if(this._workers[key]){
-        let {worker} = this._workers[key];
+    if(this._workers[key] && this._workers[key].played === true){
+        let { worker } = this._workers[key];
+        this._workers[key].played = false;
         worker.terminate();
     }
     return this;
@@ -247,9 +249,11 @@ Store.prototype._accessorify = function (options = {}) {
 Store.prototype._createWorker = function (options = {}) {
     let {path, key} = options;
     let worker = new Worker(path);
+    let played = true;
     this._workers[key] = {
         worker,
-        path
+        path,
+        played
     };
     worker.onmessage = event => this[key].result = event.data;
     worker.onerror = () => {
