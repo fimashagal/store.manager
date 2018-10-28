@@ -252,7 +252,10 @@ Store.prototype._createWorker = function (options = {}) {
         path
     };
     worker.onmessage = event => this[key].result = event.data;
-    worker.onerror = () => console.warn(`Worker error`);
+    worker.onerror = () => {
+        console.warn(`Worker error`);
+        this.stopWorker(key);
+    };
     return this;
 };
 
