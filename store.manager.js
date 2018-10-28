@@ -10,7 +10,7 @@ function Store(data = {}) {
 }
 
 Store.prototype.initialize = function (data) {
-    if(this._initialized.status === true || !Object.values(data).length) return;
+    if(this._initialized.status === true || !Object.values(data).length) return this;
     const self = this;
     for(let [key, value] of Object.entries(data)){
         let valueType = this._typeOf(value);
