@@ -3,9 +3,7 @@
 function Store(data = {}) {
     const self = this,
         _ = {};
-    for(let key of ["_reflects", "_rangedNumbers", "_lockeds"]){
-        if(data[key]) delete data[key];
-    }
+    data = this._filterData(data);
     for(let [key, value] of Object.entries(data)){
         let valueType = this._typeOf(value);
         if(valueType === "string" && /^json\s>>\s/.test(value)){
@@ -189,6 +187,13 @@ Store.prototype._isFeatured = function(groupName, key) {
         if(item === key) return true;
     }
     return false;
+};
+
+Store.prototype._filterData = function (object = {}) {
+    for(let key of ["_reflects", "_rangedNumbers", "_lockeds"]){
+        if(object[key]) delete object[key];
+    }
+    return object;
 };
 
 Store.prototype._loadJSON = function (key, url) {
