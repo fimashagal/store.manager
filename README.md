@@ -15,8 +15,7 @@ Simple store manager 🚲
     
     // or 
     
-    const storeY = new Store();
-    storeY.initialize({
+    new Store().initialize({
         int: 28
     });
 ```
@@ -88,5 +87,28 @@ For use directives add keyword with double arrows at begin of special string
 
     new Store({ remoteData: "json >> https://api.myjson.com/bins/i2hdw" })
         .addReflect('remoteData', console.log);
+
+    // Add worker path after directive 'worker >> ' for get remote data from worker
+
+    new Store({ workerData: "worker >> worker.js" })
+        .addReflect('workerData', console.log);
+
+```
+
+## Worker controls
+
+You can play and stop every existing and already added worker
+
+```javascript
+
+    let w = new Store({ workerData: "worker >> worker.js" })
+                    .addReflect('workerData', console.log);
+    
+    // When need stop transfer data
+    setTimeout(() => w.stopWorker('workerData'), 7e3);
+    
+    // And run again
+    setTimeout(() => w.playWorker('workerData'), 1e4);
+
 
 ```

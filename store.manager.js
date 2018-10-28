@@ -2,7 +2,7 @@
 
 function Store(data = {}) {
     this._initialized = { status: false };
-    this._ns = ["_reflects", "_rangedNumbers", "_lockeds", "_", "_initialized"];
+    this._ns = ["_reflects", "_rangedNumbers", "_workers", "_lockeds", "_", "_initialized"];
     this._preinitialize();
     return this.initialize(this._filterData(data));
 }
@@ -11,11 +11,25 @@ Store.prototype.initialize = function (data) {
     if(this._initialized.status === true || !Object.values(data).length) return this;
     for(let [key, value] of Object.entries(data)){
         let valueType = this._typeOf(value);
-        if(valueType === "string" && /^json\s>>\s/.test(value)){
-            let url = value.replace(/json\s>>\s/, "");
-            valueType = "object";
-            value = {};
-            this._loadJSON(key, url);
+        if(valueType === "string" && /^json\s>>\s|^worker\s>>\s/.test(value)){
+            if(/^json\s>>\s/.test(value)){
+                let url = value.replace(/json\s>>\s/, "");
+                valueType = "object";
+                value = {};
+                this._loadJSON(key, url);
+            }
+            if(/^worker\s>>\s/.test(value)){
+                let path = value.replace(/worker\s>>\s/, "");
+                valueType = "object";
+                value = {
+                    result: null
+                };
+                try {
+                    this._playWorker({path, key});
+                } catch (err) {
+                    console.warn("Worker not found");
+                }
+            }
         }
         if(/object|array/.test(valueType)){
             value = this._proxify({ key, value });
@@ -99,6 +113,24 @@ Store.prototype.removeLock = function(key){
 
 Store.prototype.isLocked = function(key = ""){
     return this._isFeatured('_lockeds', key);
+};
+
+Store.prototype.playWorker = function (key) {
+    let path = this._workers[key].path;
+    if(this._workers[key] && this._typeOf(this._workers[key].path) !== "null"){
+
+        this._playWorker({path, key});
+    }
+    return this;
+};
+
+Store.prototype.stopWorker = function (key) {
+    if(this._workers[key] && this._typeOf(this._workers[key].worker) !== "null"){
+        let {worker} = this._workers[key];
+        worker.terminate();
+        this._workers[key].worker = null;
+    }
+    return this;
 };
 
 Store.prototype._reflect = function (key, value) {
@@ -217,6 +249,21 @@ Store.prototype._accessorify = function (options = {}) {
         }
     });
 };
+
+Store.prototype._playWorker = function (options = {}) {
+    let {path, key} = options;
+    let worker = new Worker(path);
+    if(!this._workers[key]){
+        this._workers[key] = {
+            worker,
+            path
+        };
+    }
+    worker.onmessage = event => this[key].result = event.data;
+    worker.onerror = event => console.warn(event.message);
+};
+
+
 
 Store.prototype._loadJSON = function (key, url) {
     fetch(url)
