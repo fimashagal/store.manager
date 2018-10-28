@@ -2,10 +2,8 @@
 
 function Store(data = {}) {
     this._initialized = { status: false };
-    this._reflects = {};
-    this._rangedNumbers = {};
-    this._lockeds = {};
-    this._ = {};
+    this._ns = ["_reflects", "_rangedNumbers", "_lockeds", "_", "_initialized"];
+    this._preinitialize();
     return this.initialize(this._filterData(data));
 }
 
@@ -157,8 +155,15 @@ Store.prototype._isFeatured = function(groupName, key) {
     return false;
 };
 
+Store.prototype._preinitialize = function () {
+    for(let key of this._ns){
+        this[key] = {};
+    }
+    return this;
+};
+
 Store.prototype._filterData = function (object = {}) {
-    for(let key of ["_reflects", "_rangedNumbers", "_lockeds", "_", "_initialized"]){
+    for(let key of this._ns){
         if(object[key]) delete object[key];
     }
     return object;
