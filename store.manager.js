@@ -129,6 +129,15 @@ Store.prototype.stopWorker = function (key) {
     return this;
 };
 
+Store.prototype.removeWorker = function (key) {
+    if(this._workers[key]){
+        if(this._workers[key].played === true) {
+            this.stopWorker(key);
+        }
+        delete this._workers[key];
+    }
+};
+
 Store.prototype._reflect = function (key, value) {
     let { _reflects } = this;
     if(key in _reflects && this._isFn(_reflects[key])) {
