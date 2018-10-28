@@ -111,6 +111,6 @@ You can play and stop every existing and already added worker
     setTimeout(() => w.playWorker('workerData'), 1e4);
     
     // Remove worker but stay value with reflects and other
-    setTimeout(() => w.removeWorker('workerData'), 11e3)
+    setTimeout(() => w.removeWorker('workerData'), 11e3);
 
 ```
