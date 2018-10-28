@@ -1,9 +1,19 @@
 "use strict";
 
 function Store(data = {}) {
-    const self = this,
-        _ = {};
-    data = this._filterData(data);
+    this._initialized = {
+        status: false
+    };
+    this._reflects = {};
+    this._rangedNumbers = {};
+    this._lockeds = {};
+    this._ = {};
+    return this.initialize(this._filterData(data));
+}
+
+Store.prototype.initialize = function (data) {
+    if(this._initialized.status === true || !Object.values(data).length) return;
+    const self = this;
     for(let [key, value] of Object.entries(data)){
         let valueType = this._typeOf(value);
         if(valueType === "string" && /^json\s>>\s/.test(value)){
@@ -13,57 +23,39 @@ function Store(data = {}) {
             this._loadJSON(key, url);
         }
         if(/object|array/.test(valueType)){
-            value = new Proxy(value, {
-                set(prxTarget, prxKey, prxValue){
-                    if(self.isLocked(key)) {
-                        return false;
-                    }
-                    prxTarget[prxKey] = prxValue;
-                    self._reflect(key, prxTarget);
-                    return true;
-                },
-                deleteProperty(prxTarget, prxKey) {
-                    if(self.isLocked(key)) {
-                        return false;
-                    }
-                    self._reflect(key, Object.create(null));
-                    delete prxTarget[prxKey];
-                    return true;
-                }
-            });
+            value = this._proxify(key, value);
         }
-        _[key] = {
+        self._[key] = {
             value: value,
             type: valueType
         };
         Object.defineProperties(this, {
             [key]: {
                 get(){
-                    return _[key].value;
+                    return self._[key].value;
                 },
                 set(value){
-                    let dataItem = _[key];
+                    let dataItem = self._[key];
                     if(self._typeOf(value) === dataItem.type
                         && !self.isLocked(key)
                         && !/object|array/.test(valueType)){
-                            if(self._isNum(value) && self.isRanged(key)){
-                                value = self._holdInRange(key, value);
-                            }
-                            if(value !== dataItem.value){
-                                dataItem.value = value;
-                                self._reflect(key, value);
-                                return true;
-                            }
+                        if(self._isNum(value) && self.isRanged(key)){
+                            value = self._holdInRange(key, value);
+                        }
+                        if(value !== dataItem.value){
+                            dataItem.value = value;
+                            self._reflect(key, value);
+                            return true;
+                        }
                     }
                 }
             }
         });
     }
-    this._reflects = {};
-    this._rangedNumbers = {};
-    this._lockeds = {};
+    this._initialized.status = true;
+    this._initialized = Object.freeze(this._initialized);
     return this;
-}
+};
 
 Store.prototype.is = function(...args){
     return this._isMarriage(args);
@@ -190,10 +182,32 @@ Store.prototype._isFeatured = function(groupName, key) {
 };
 
 Store.prototype._filterData = function (object = {}) {
-    for(let key of ["_reflects", "_rangedNumbers", "_lockeds"]){
+    for(let key of ["_reflects", "_rangedNumbers", "_lockeds", "_", "_initialized"]){
         if(object[key]) delete object[key];
     }
     return object;
+};
+
+Store.prototype._proxify = function (key, value) {
+    const self = this;
+    return new Proxy(value, {
+        set(prxTarget, prxKey, prxValue){
+            if(self.isLocked(key)) {
+                return false;
+            }
+            prxTarget[prxKey] = prxValue;
+            self._reflect(key, prxTarget);
+            return true;
+        },
+        deleteProperty(prxTarget, prxKey) {
+            if(self.isLocked(key)) {
+                return false;
+            }
+            self._reflect(key, Object.create(null));
+            delete prxTarget[prxKey];
+            return true;
+        }
+    });
 };
 
 Store.prototype._loadJSON = function (key, url) {

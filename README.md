@@ -4,14 +4,21 @@ Simple store manager 🚲
 ## Create store
 
 ```javascript
-const storeA = new Store({
-    propertyNumber: 0,
-    propertyBoolean: false,
-    propertyObject: {
-        a: true,
-        b: false
-    }
-});
+    const storeA = new Store({
+        propertyNumber: 0,
+        propertyBoolean: false,
+        propertyObject: {
+            a: true,
+            b: false
+        }
+    });
+    
+    // or 
+    
+    const storeY = new Store();
+    storeY.initialize({
+        int: 28
+    });
 ```
 
 ## Add/remove reflect to change property value
