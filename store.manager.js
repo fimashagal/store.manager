@@ -20,7 +20,7 @@ Store.prototype.initialize = function (data) {
             this._loadJSON(key, url);
         }
         if(/object|array/.test(valueType)){
-            value = this._proxify(key, value);
+            value = this._proxify({ key, value });
         }
         this._[key] = {
             value: value,
@@ -164,8 +164,9 @@ Store.prototype._filterData = function (object = {}) {
     return object;
 };
 
-Store.prototype._proxify = function (key, value) {
+Store.prototype._proxify = function (options = {}) {
     const self = this;
+    let {key, value} = options;
     return new Proxy(value, {
         set(prxTarget, prxKey, prxValue){
             if(self.isLocked(key)) {
