@@ -120,10 +120,9 @@ Store.prototype.playWorker = function (key) {
 };
 
 Store.prototype.stopWorker = function (key) {
-    if(this._workers[key] && this._typeOf(this._workers[key].worker) !== "null"){
+    if(this._workers[key]){
         let {worker} = this._workers[key];
         worker.terminate();
-        this._workers[key].worker = null;
     }
     return this;
 };
@@ -248,12 +247,10 @@ Store.prototype._accessorify = function (options = {}) {
 Store.prototype._createWorker = function (options = {}) {
     let {path, key} = options;
     let worker = new Worker(path);
-    if(!this._workers[key] || this._typeOf(!this._workers[key]) === "null"){
-        this._workers[key] = {
-            worker,
-            path
-        };
-    }
+    this._workers[key] = {
+        worker,
+        path
+    };
     worker.onmessage = event => this[key].result = event.data;
     worker.onerror = () => console.warn(`Worker error`);
     return this;
