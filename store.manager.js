@@ -27,28 +27,8 @@ Store.prototype.initialize = function (data) {
             value: value,
             type: valueType
         };
-        Object.defineProperties(this, {
-            [key]: {
-                get(){
-                    return self._[key].value;
-                },
-                set(value){
-                    let dataItem = self._[key];
-                    if(self._typeOf(value) === dataItem.type
-                        && !self.isLocked(key)
-                        && !/object|array/.test(valueType)){
-                        if(self._isNum(value) && self.isRanged(key)){
-                            value = self._holdInRange(key, value);
-                        }
-                        if(value !== dataItem.value){
-                            dataItem.value = value;
-                            self._reflect(key, value);
-                            return true;
-                        }
-                    }
-                }
-            }
-        });
+        self._accessorify({ key, valueType });
+
     }
     this._initialized.status = true;
     this._initialized = Object.freeze(this._initialized);
@@ -204,6 +184,32 @@ Store.prototype._proxify = function (key, value) {
             self._reflect(key, Object.create(null));
             delete prxTarget[prxKey];
             return true;
+        }
+    });
+};
+
+Store.prototype._accessorify = function (options = {}) {
+    let {key, valueType} = options;
+    const self = this;
+    Object.defineProperties(this, {
+        [key]: {
+            get(){
+                return self._[key].value;
+            },
+            set(value){
+                let dataItem = self._[key];
+                if(self._typeOf(value) === dataItem.type
+                    && !self.isLocked(key) && !/object|array/.test(valueType)){
+                    if(self._isNum(value) && self.isRanged(key)){
+                        value = self._holdInRange(key, value);
+                    }
+                    if(value !== dataItem.value){
+                        dataItem.value = value;
+                        self._reflect(key, value);
+                        return true;
+                    }
+                }
+            }
         }
     });
 };
