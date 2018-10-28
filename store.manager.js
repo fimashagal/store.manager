@@ -1,9 +1,7 @@
 "use strict";
 
 function Store(data = {}) {
-    this._initialized = {
-        status: false
-    };
+    this._initialized = { status: false };
     this._reflects = {};
     this._rangedNumbers = {};
     this._lockeds = {};
