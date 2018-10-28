@@ -3,7 +3,9 @@
 function Store(data = {}) {
     const self = this,
         _ = {};
-    if(data.reflects) delete data.reflects;
+    for(let key of ["_reflects", "_rangedNumbers", "_lockeds"]){
+        if(data[key]) delete data[key];
+    }
     for(let [key, value] of Object.entries(data)){
         let valueType = this._typeOf(value);
         if(valueType === "string" && /^json\s>>\s/.test(value)){
@@ -59,9 +61,9 @@ function Store(data = {}) {
             }
         });
     }
-    this.reflects = {};
-    this.rangedNumbers = {};
-    this.lockeds = {};
+    this._reflects = {};
+    this._rangedNumbers = {};
+    this._lockeds = {};
     return this;
 }
 
@@ -75,13 +77,13 @@ Store.prototype.isnt = function(...args){
 
 Store.prototype.addReflect = function(key, fn){
     if(key in this && this._isFn(fn)) {
-        this.reflects[key] = fn;
+        this._reflects[key] = fn;
     }
     return this;
 };
 
 Store.prototype.removeReflect = function(key){
-    delete this.reflects[key];
+    delete this._reflects[key];
     return this;
 };
 
@@ -95,8 +97,8 @@ Store.prototype.addRange = function(key, range, minReflect, maxReflect){
         range.reverse();
     }
 
-    this.rangedNumbers[key] = { range: range };
-    let rangeObject = this.rangedNumbers[key];
+    this._rangedNumbers[key] = { range: range };
+    let rangeObject = this._rangedNumbers[key];
     if(this._isFn(minReflect)) {
         rangeObject.minReflect = minReflect;
     }
@@ -104,7 +106,7 @@ Store.prototype.addRange = function(key, range, minReflect, maxReflect){
         rangeObject.maxReflect = maxReflect;
     }
 
-    this.rangedNumbers[key] = Object.freeze(rangeObject);
+    this._rangedNumbers[key] = Object.freeze(rangeObject);
 
     this[key] = this._holdInRange(key, this[key]);
 
@@ -112,33 +114,33 @@ Store.prototype.addRange = function(key, range, minReflect, maxReflect){
 };
 
 Store.prototype.removeRange = function(key){
-    delete this.rangedNumbers[key];
+    delete this._rangedNumbers[key];
     return this;
 };
 
 Store.prototype.isRanged = function(key = ""){
-    return this._isFeatured('rangedNumbers', key);
+    return this._isFeatured('_rangedNumbers', key);
 };
 
 Store.prototype.addLock = function(key){
-    if(!key in this && !key in this.lockeds) return;
-    this.lockeds[key] = true;
+    if(!key in this && !key in this._lockeds) return;
+    this._lockeds[key] = true;
     return this;
 };
 
 Store.prototype.removeLock = function(key){
-    delete this.lockeds[key];
+    delete this._lockeds[key];
     return this;
 };
 
 Store.prototype.isLocked = function(key = ""){
-    return this._isFeatured('lockeds', key);
+    return this._isFeatured('_lockeds', key);
 };
 
 Store.prototype._reflect = function (key, value) {
-    let { reflects } = this;
-    if(key in reflects && this._isFn(reflects[key])) {
-        reflects[key](value);
+    let { _reflects } = this;
+    if(key in _reflects && this._isFn(_reflects[key])) {
+        _reflects[key](value);
     }
 };
 
@@ -150,7 +152,7 @@ Store.prototype._typeOf = function (object) {
 };
 
 Store.prototype._holdInRange = function(key, value){
-    let rangeObject = this.rangedNumbers[key],
+    let rangeObject = this._rangedNumbers[key],
         [min, max] = rangeObject.range,
         {minReflect, maxReflect} = rangeObject;
     if(value < min) {
