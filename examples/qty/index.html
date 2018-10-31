@@ -15,19 +15,22 @@
         <button class="btn plus">+</button>
     </main>
 
-    <script src="./../../store.manager.js"></script>
+    <script src="./../../store.js"></script>
 
     <script>
 
         const counterElement = document.querySelector('.counter');
 
-        const qtyStore = new Store({ qty: -1, obj: {} });
+        const qtyStore = new Store({ qty: -1, obj: {a: 2, b: 2} });
 
         qtyStore
             .addReflect('qty', value => {
                 counterElement.innerText = value;
+                console.log(qtyStore.exportData());
             })
             .addRange('qty', [0, 10]);
+
+
 
         document.addEventListener('click', event => {
            let {target} = event,

@@ -138,6 +138,35 @@ Store.prototype.removeWorker = function (key) {
     }
 };
 
+Store.prototype.exportData = function () {
+    let response = {};
+    for(let [key, data] of Object.entries(this._)){
+        const dataValue = data.value,
+              dataType = data.type;
+
+        if(/object|array/.test(data.type)){
+            let keys = Object.keys(dataValue),
+                values = Object.values(dataValue);
+
+            if(dataType === "object"){
+                response[key] = {};
+                for(let i = 0; i < keys.length; i++){
+                    response[key][keys[i]] = values[i];
+                }
+            }
+            if(dataType === "array"){
+                response[key] = [];
+                for(let i = 0; i < keys.length; i++){
+                    response[key].push(values[i]);
+                }
+            }
+        } else {
+            response[key] = dataValue;
+        }
+    }
+    return response;
+};
+
 Store.prototype._reflect = function (key, value) {
     let { _reflects } = this;
     if(key in _reflects && this._isFn(_reflects[key])) {
