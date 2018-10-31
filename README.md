@@ -30,6 +30,13 @@ Simple store manager 🚲
   storeA.removeReflect("propertyBoolean");
 ```
 
+## Export data anytime
+
+```javascript
+  storeA.exportData();
+  
+```
+
 ## Check value as boolean type
 
 Also u can use few arguments for group test

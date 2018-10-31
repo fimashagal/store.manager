@@ -21,7 +21,7 @@
 
         const counterElement = document.querySelector('.counter');
 
-        const qtyStore = new Store({ qty: -1, obj: {a: 2, b: 2} });
+        const qtyStore = new Store({ qty: -1 });
 
         qtyStore
             .addReflect('qty', value => {
