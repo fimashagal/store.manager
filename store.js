@@ -143,21 +143,16 @@ Store.prototype.exportData = function () {
     for(let [key, data] of Object.entries(this._)){
         const dataValue = data.value,
               dataType = data.type;
-
         if(/object|array/.test(data.type)){
             let keys = Object.keys(dataValue),
                 values = Object.values(dataValue);
-
-            if(dataType === "object"){
-                response[key] = {};
-                for(let i = 0; i < keys.length; i++){
-                    response[key][keys[i]] = values[i];
-                }
-            }
-            if(dataType === "array"){
-                response[key] = [];
-                for(let i = 0; i < keys.length; i++){
-                    response[key].push(values[i]);
+            response[key] = dataType === "object" ? {} : [];
+            for(let i = 0, inObjectValue; i < keys.length; i++){
+                inObjectValue = values[i];
+                if(dataType === "object"){
+                    response[key][keys[i]] = inObjectValue;
+                } else {
+                    response[key].push(inObjectValue);
                 }
             }
         } else {
