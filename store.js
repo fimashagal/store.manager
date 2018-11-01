@@ -138,7 +138,7 @@ Store.prototype.removeWorker = function (key) {
     }
 };
 
-Store.prototype.exportData = function () {
+Store.prototype.exportData = function (...exportKeys) {
     let response = {};
     for(let [key, data] of Object.entries(this._)){
         const dataValue = data.value,
@@ -159,6 +159,14 @@ Store.prototype.exportData = function () {
             response[key] = dataValue;
         }
     }
+    if(exportKeys.length){
+        for(let key of Object.keys(response)){
+            if(!exportKeys.includes(key)){
+                delete response[key];
+            }
+        }
+    }
+
     return response;
 };
 
@@ -295,8 +303,6 @@ Store.prototype._createWorker = function (options = {}) {
     };
     return this;
 };
-
-
 
 Store.prototype._loadJSON = function (key, url) {
     fetch(url)

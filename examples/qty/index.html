@@ -21,12 +21,16 @@
 
         const counterElement = document.querySelector('.counter');
 
-        const qtyStore = new Store({ qty: -1 });
+        const qtyStore = new Store({
+            qty: -1,
+            volume: 100,
+            weight: 1000
+        });
 
         qtyStore
             .addReflect('qty', value => {
                 counterElement.innerText = value;
-                console.log(qtyStore.exportData());
+                console.log(qtyStore.exportData("qty", "volume"));
             })
             .addRange('qty', [0, 10]);
 
