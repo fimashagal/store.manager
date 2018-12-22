@@ -30,6 +30,18 @@ Simple store manager 🚲
   storeA.removeReflect("propertyBoolean");
 ```
 
+## Add reflect with jerk-param for urgent executing one time after setup without data-changing
+
+```javascript
+    const x = new Store({
+        int: 0
+    });
+    
+    // Third argument it is jerk-param. By default it was false
+    x.addReflect('int', console.log, true); 
+
+```
+
 ## Export data anytime
 
 ```javascript
