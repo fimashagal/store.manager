@@ -49,9 +49,12 @@ Store.prototype.isnt = function(...args){
     return !this._isMarriage(args);
 };
 
-Store.prototype.addReflect = function(key, fn){
+Store.prototype.addReflect = function(key, fn, jerk = false){
     if(key in this && this._isFn(fn)) {
         this._reflects[key] = fn;
+        if(typeof jerk === "boolean" && jerk === true){
+            this._reflect(key, this._[key].value);
+        }
     }
     return this;
 };
